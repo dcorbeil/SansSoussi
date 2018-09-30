@@ -93,6 +93,7 @@ namespace SansSoussi.Controllers
             {
                 if (!string.IsNullOrEmpty(searchData))
                 {
+                    // TODO: Valider le searchData car il y a une faille ici. on peut injecter dequoi en modifiant le search
                     SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId = '" + user.ProviderUserKey + "' and Comment like '%" + searchData + "%'", _dbConnection);
                     _dbConnection.Open();
                     SqlDataReader rd = cmd.ExecuteReader();
@@ -125,6 +126,8 @@ namespace SansSoussi.Controllers
             HttpCookie cookie = HttpContext.Request.Cookies["username"];
             
             List<string> cookieString = new List<string>();
+
+            // TODO: changer base64 pour pas base64
 
             //Decode the cookie from base64 encoding
             byte[] encodedDataAsBytes = System.Convert.FromBase64String(cookie.Value);

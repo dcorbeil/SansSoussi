@@ -98,6 +98,7 @@ namespace SansSoussi.Controllers
                 {
                     FormsService.SignIn(model.UserName, false /* createPersistentCookie */);
                     //Encode the username in base64
+                    // TODO: Ne pas encoder en base64
                     byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.ASCII.GetBytes(model.UserName);
                     HttpCookie authCookie = new HttpCookie("username", System.Convert.ToBase64String(toEncodeAsBytes));
                     HttpContext.Response.Cookies.Add(authCookie);
