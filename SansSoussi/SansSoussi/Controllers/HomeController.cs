@@ -27,22 +27,33 @@ namespace SansSoussi.Controllers
         public ActionResult Comments()
         {
             List<string> comments = new List<string>();
+            
 
             //Get current user from default membership provider
             MembershipUser user = Membership.Provider.GetUser(HttpContext.User.Identity.Name, true);
             if (user != null)
             {
-                SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId ='" + user.ProviderUserKey + "'", _dbConnection);
-                _dbConnection.Open();
-                SqlDataReader rd = cmd.ExecuteReader();
-
-                while (rd.Read())
+                try
                 {
-                    comments.Add(rd.GetString(0));
-                }
+                    SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId ='" + user.ProviderUserKey + "'", _dbConnection);
+                    _dbConnection.Open();
+                    SqlDataReader rd = cmd.ExecuteReader();
 
-                rd.Close();
-                _dbConnection.Close();
+                    while (rd.Read())
+                    {
+                        comments.Add(rd.GetString(0));
+                    }
+                    rd.Close();
+                }
+                catch (Exception ex)
+                {
+                    // TODO: faire la même gestion d'erreur que Comments
+                    //status = ex.Message;
+                }
+                finally
+                {
+                    _dbConnection.Close();
+                }
             }
             return View(comments);
         }
@@ -71,6 +82,7 @@ namespace SansSoussi.Controllers
                     throw new Exception("Vous devez vous connecter");
                 }
             }
+            // TODO: Ne pas catcher toute ?
             catch (Exception ex)
             {
                 status = ex.Message;
