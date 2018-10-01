@@ -54,6 +54,9 @@ namespace SansSoussi.Controllers
             string status = "success";
             try
             {
+
+                comment = Server.HtmlEncode(comment);
+
                 //Get current user from default membership provider
                 MembershipUser user = Membership.Provider.GetUser(HttpContext.User.Identity.Name, true);
                 if (user != null)
@@ -105,8 +108,12 @@ namespace SansSoussi.Controllers
                 {
                     try
                     {
+
+                        searchData = Server.HtmlEncode(searchData);
+
                         // TODO: Valider le searchData car il y a une faille ici. on peut injecter dequoi en modifiant le search
                         SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId = '" + user.ProviderUserKey + "' and Comment like '%" + searchData + "%'", _dbConnection);
+
                         _dbConnection.Open();
                         SqlDataReader rd = cmd.ExecuteReader();
 
