@@ -26,6 +26,6 @@ function AddComments() {
     }
 }
 
-function addNewComment() {
+//function addNewComment() {
     
-}
+//}

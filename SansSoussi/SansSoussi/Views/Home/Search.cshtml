@@ -16,10 +16,10 @@
 <input id="searchsBtn" onclick="search();" value="Search" type="button" />
 
 <div id="ResultsBlock">
-@foreach(var result in Model)
-{
-    <div>
-        @Html.Raw(result)
-    </div>
-}
+    @foreach (var result in Model)
+    {
+        <div>
+            @Html.Raw(result)
+        </div>
+    }
 </div>

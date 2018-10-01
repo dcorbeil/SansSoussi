@@ -33,33 +33,22 @@ namespace SansSoussi.Controllers
             MembershipUser user = Membership.Provider.GetUser(HttpContext.User.Identity.Name, true);
             if (user != null)
             {
-                try
-                {
-                    SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId ='" + user.ProviderUserKey + "'", _dbConnection);
-                    _dbConnection.Open();
-                    SqlDataReader rd = cmd.ExecuteReader();
+                SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId ='" + user.ProviderUserKey + "'", _dbConnection);
+                _dbConnection.Open();
+                SqlDataReader rd = cmd.ExecuteReader();
 
-                    while (rd.Read())
-                    {
-                        comments.Add(rd.GetString(0));
-                    }
-                    rd.Close();
-                }
-                catch (Exception ex)
+                while (rd.Read())
                 {
-                    // TODO: faire la même gestion d'erreur que Comments
-                    //status = ex.Message;
+                    comments.Add(rd.GetString(0));
                 }
-                finally
-                {
-                    _dbConnection.Close();
-                }
+                rd.Close();
+                _dbConnection.Close();
             }
             return View(comments);
         }
 
         [HttpPost]
-        [ValidateInput(false)]
+        [ValidateInput(false)] // C'est quoi ca ?
         public ActionResult Comments(string comment)
         {
             string status = "success";
@@ -95,6 +84,15 @@ namespace SansSoussi.Controllers
             return Json(status);
         }
 
+        [HttpGet]
+        public ActionResult Search()
+        {
+            List<string> searchResults = new List<string>();
+            return View(searchResults);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)] // C'est quoi ca ?
         public ActionResult Search(string searchData)
         {
             List<string> searchResults = new List<string>();
@@ -105,22 +103,33 @@ namespace SansSoussi.Controllers
             {
                 if (!string.IsNullOrEmpty(searchData))
                 {
-                    // TODO: Valider le searchData car il y a une faille ici. on peut injecter dequoi en modifiant le search
-                    SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId = '" + user.ProviderUserKey + "' and Comment like '%" + searchData + "%'", _dbConnection);
-                    _dbConnection.Open();
-                    SqlDataReader rd = cmd.ExecuteReader();
-
-
-                    while (rd.Read())
+                    try
                     {
-                        searchResults.Add(rd.GetString(0));
-                    }
+                        // TODO: Valider le searchData car il y a une faille ici. on peut injecter dequoi en modifiant le search
+                        SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId = '" + user.ProviderUserKey + "' and Comment like '%" + searchData + "%'", _dbConnection);
+                        _dbConnection.Open();
+                        SqlDataReader rd = cmd.ExecuteReader();
 
-                    rd.Close();
-                    _dbConnection.Close();
+                        while (rd.Read())
+                        {
+                            searchResults.Add(rd.GetString(0));
+                        }
+
+                        rd.Close();
+                    }
+                    // TODO: Ne pas catcher toute ?
+                    catch (Exception ex)
+                    {
+                        //status = ex.Message;
+                        int allo = 430;
+                    }
+                    finally
+                    {
+                        _dbConnection.Close();
+                    }
                 }
             }
-            return View(searchResults);
+            return Json(searchResults);
         }
 
         [HttpGet]
