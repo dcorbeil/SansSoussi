@@ -13,6 +13,15 @@ namespace SansSoussi.Models
 
     #region Models
 
+    public class ValidationStrings
+    {
+        public const string UserNameValidation = "^([a-zA-Z0-9._-]+)$";
+        public const string EmailValidation = "^([a-zA-Z0-9_-]+)@(([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$";
+
+        public const string UserNameErrorMessage = "Invalid User Name";
+        public const string EmailErrorMessage = "Invalid Email address";
+    }
+
     public class ChangePasswordModel
     {
         [Required]
@@ -36,6 +45,7 @@ namespace SansSoussi.Models
     {
         [Required]
         [Display(Name = "User name")]
+        [RegularExpression(ValidationStrings.UserNameValidation, ErrorMessage = ValidationStrings.UserNameErrorMessage)]
         public string UserName { get; set; }
 
         [Required]
@@ -52,11 +62,13 @@ namespace SansSoussi.Models
     {
         [Required]
         [Display(Name = "User name")]
+        [RegularExpression(ValidationStrings.UserNameValidation, ErrorMessage = ValidationStrings.UserNameErrorMessage)]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email address")]
+        [RegularExpression(ValidationStrings.EmailValidation, ErrorMessage = ValidationStrings.EmailErrorMessage)]
         public string Email { get; set; }
 
         [Required]

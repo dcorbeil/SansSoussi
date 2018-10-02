@@ -48,7 +48,7 @@ namespace SansSoussi.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)] // C'est quoi ca ?
+        [ValidateInput(true)]
         [ValidateAntiForgeryToken]
         public ActionResult Comments(string comment)
         {
@@ -75,7 +75,6 @@ namespace SansSoussi.Controllers
                     throw new Exception("Vous devez vous connecter");
                 }
             }
-            // TODO: Ne pas catcher toute ?
             catch (Exception ex)
             {
                 status = ex.Message;
@@ -96,7 +95,7 @@ namespace SansSoussi.Controllers
         }
 
         [HttpPost]
-        [ValidateInput(false)] // C'est quoi ca ?
+        [ValidateInput(true)]
         public ActionResult Search(string searchData)
         {
             List<string> searchResults = new List<string>();
@@ -112,7 +111,6 @@ namespace SansSoussi.Controllers
 
                         searchData = Server.HtmlEncode(searchData);
 
-                        // TODO: Valider le searchData car il y a une faille ici. on peut injecter dequoi en modifiant le search
                         SqlCommand cmd = new SqlCommand("Select Comment from Comments where UserId = '" + user.ProviderUserKey + "' and Comment like '%" + searchData + "%'", _dbConnection);
 
                         _dbConnection.Open();
@@ -125,11 +123,9 @@ namespace SansSoussi.Controllers
 
                         rd.Close();
                     }
-                    // TODO: Ne pas catcher toute ?
                     catch (Exception ex)
                     {
-                        //status = ex.Message;
-                        int allo = 430;
+                        // Au moins on montre pas le callstack
                     }
                     finally
                     {
