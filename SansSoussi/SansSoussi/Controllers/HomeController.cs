@@ -24,6 +24,11 @@ namespace SansSoussi.Controllers
             return View();
         }
 
+        public ActionResult Error()
+        {
+            return View("Error");
+        }
+
         public ActionResult Comments()
         {
             List<string> comments = new List<string>();
@@ -184,5 +189,6 @@ namespace SansSoussi.Controllers
         {
             return View();
         }
+
     }
 }
