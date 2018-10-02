@@ -49,6 +49,7 @@ namespace SansSoussi.Controllers
 
         [HttpPost]
         [ValidateInput(false)] // C'est quoi ca ?
+        [ValidateAntiForgeryToken]
         public ActionResult Comments(string comment)
         {
             string status = "success";
